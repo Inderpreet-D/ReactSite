@@ -1,10 +1,11 @@
-import admin from "firebase-admin";
+import Admin from "firebase-admin";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-if (!admin.apps.length) {
-  const credential = admin.credential.cert({
+// Initialize app only once
+if (!Admin.apps.length) {
+  const credential = Admin.credential.cert({
     projectId: "react-site-inder",
     privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
@@ -12,17 +13,24 @@ if (!admin.apps.length) {
 
   const databaseURL = "https://react-site-inder.firebaseio.com";
 
-  admin.initializeApp({ credential, databaseURL });
+  Admin.initializeApp({ credential, databaseURL });
 }
 
-const Database = admin.database();
+const Database = Admin.database();
 
-export const get = async (path: string) => await Database.ref(path).get();
+// Gets a value from the database
+export const get = async (path: string): Promise<any> => {
+  return await new Promise(async (res, rej) => {
+    try {
+      await Database.ref(path).once("value", (snap) => res(snap.val()));
+    } catch (err) {
+      rej(err);
+    }
+  });
+};
 
-export const set = async (path: string, data: any) =>
+// Writes some data to the database
+export const set = async (path: string, data: any): Promise<void> =>
   await Database.ref(path).set(data);
-
-// export const push = async (path: string, data: any) =>
-// await Database.ref(path).push(data);
 
 export default Database;
