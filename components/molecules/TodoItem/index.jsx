@@ -1,15 +1,61 @@
-import React from "react";
+import {
+  StyledItem,
+  StyledButtons,
+  StyledUp,
+  StyledDown,
+  StyledLeft,
+  StyledRight,
+  StyledContent,
+  StyledDelete,
+} from "./TodoItem.styles";
+import Checkbox from "../../atoms/Checkbox";
 
-import { StyledItem } from "./TodoItem.styles";
+const TodoItem = ({
+  content,
+  depth,
+  done,
+  onCheck,
+  onDelete,
+  canMoveUp,
+  canMoveDown,
+  onMoveUp,
+  onMoveDown,
+  canMoveLeft,
+  canMoveRight,
+  onMoveLeft,
+  onMoveRight,
+}) => {
+  const [hover, setHover] = React.useState(false);
 
-const TodoItem = ({ content, done }) => {
+  const handleHover = (val) => () => setHover(val);
+
   return (
-    <StyledItem done>
-      <div></div>
+    <StyledItem
+      depth={depth}
+      onMouseEnter={handleHover(true)}
+      onMouseLeave={handleHover(false)}
+    >
+      <Checkbox
+        checked={done}
+        onCheck={onCheck}
+        style={{ marginRight: "1rem" }}
+      />
 
-      {content}
+      <StyledContent hover={hover} done={done}>
+        {content}
+      </StyledContent>
 
-      <div></div>
+      <StyledButtons>
+        {canMoveLeft && <StyledLeft onClick={onMoveLeft} />}
+
+        {canMoveUp && <StyledUp onClick={onMoveUp} />}
+
+        {canMoveDown && <StyledDown onClick={onMoveDown} />}
+
+        {canMoveRight && <StyledRight onClick={onMoveRight} />}
+
+        <StyledDelete onClick={onDelete} />
+      </StyledButtons>
     </StyledItem>
   );
 };
