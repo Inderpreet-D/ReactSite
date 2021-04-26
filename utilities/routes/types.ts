@@ -4,5 +4,5 @@ export interface Routes {
   "Toad Village": string;
   "MTG Treachery": string;
   Poetry: string;
-  Todos: string;
+  // Todos: string;
 }

@@ -6,7 +6,7 @@ const routes: Routes = {
   "Toad Village": "/toadvillage",
   "MTG Treachery": "/treachery",
   Poetry: "/poetry",
-  Todos: "/todos",
+  // Todos: "/todos",
 };
 
 export default routes;
